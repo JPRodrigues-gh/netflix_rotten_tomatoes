@@ -1,6 +1,6 @@
 ![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
 
-Welcome USER_NAME,
+Welcome JPRodrigues-gh,
 
 This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **August 17, 2021**
 
@@ -29,3 +29,12 @@ The deployment terminal is set to 80 columns by 24 rows. That means that each li
 
 -----
 Happy coding!
+
+# Netfilx Rotten Tomatoes dataset analysis
+
+## Bugs and Fixes
+
+
+## Sources and References
+
+* The dataset I am using I downloaded from https://www.kaggle.com/datasets/ashishgup/netflix-rotten-tomatoes-metacritic-imdb
