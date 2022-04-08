@@ -38,3 +38,5 @@ Happy coding!
 ## Sources and References
 
 * The dataset I am using I downloaded from https://www.kaggle.com/datasets/ashishgup/netflix-rotten-tomatoes-metacritic-imdb
+* https://www.w3schools.com/
+* 
