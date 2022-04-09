@@ -35,6 +35,11 @@ Happy coding!
 ## Bugs and Fixes
 
 * get_header_choice had endless while loop because return statement in validate_criteria Try statement was not inside the if statement. As a result validation would always be false and therefore get_data_choice would not be called.
+  * Moved the validate_criteria Try statement inside the if statement
+* get_data_choice call to validate_criteria placed in the for loop causing no rows found error to be shown on each row check. 
+  * Moved the call to validate_criteria out of the for loop
+* line 128 user_worksheet.append_row(column_list) passing incorrect argument 'column_list' instead of 'row_data'
+* line 127 row_data = fetch_worksheet.row_values(i+1) had to +1 the argument to row_values as it returning a row before, not the requested row. 
 
 ## Sources and References
 

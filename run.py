@@ -79,7 +79,7 @@ def get_header_choice():
             #    print(col_idx)
                break
 
-        if validate_criteria(found, search_column):
+        if validate_criteria(found, search_column, 'column'):
             get_data = True
             # print(get_data)
             break
@@ -101,6 +101,7 @@ def get_data_choice(search_column, col_idx):
     """
     while True:
         data = input(f"Please enter the data to search in the {search_column} column: ")
+        print("Searching for data...\n")
         fetch_worksheet = SHEET.worksheet('Subset')
         user_worksheet = SHEET.worksheet('User Requested Data')
         row_cnt = len(fetch_worksheet.get_all_values())
@@ -108,8 +109,10 @@ def get_data_choice(search_column, col_idx):
         column = fetch_worksheet.col_values(col_idx)
 
         cnt=0
-        for i in range(1, 50):
+        found=False
+        for i in range(1, 200):
             if data.lower() in column[i].lower():
+                found = True
                 cnt+=1
                 if cnt==1:
                    request = service.spreadsheets().values().clear(
@@ -119,12 +122,20 @@ def get_data_choice(search_column, col_idx):
                    response = request.execute()
                    column_list = fetch_worksheet.row_values(1)
                    user_worksheet.append_row(column_list)
+                # else:
+                # print("The data found: " + column[i])
+                row_data = fetch_worksheet.row_values(i+1)
+                user_worksheet.append_row(row_data)
+                   
+        
+        if validate_criteria(found, data, 'data'):
+            print(f"{cnt} rows found")
+            print("You will find the data in the 'User Requested Data' worksheet.")
+            break    
+        
+        # user_worksheet.append_row(i)
 
-                # print(column[i])
-            # user_worksheet.append_row(i)
-
-        break
-        # print(fetch_worksheet.cols)
+        # break
         # found=False
         # for i in column_list:
         #     if i == search_column:
@@ -133,12 +144,17 @@ def get_data_choice(search_column, col_idx):
 
     return search_column
 
-def validate_criteria(found, criteria):
+def validate_criteria(found, criteria, search):
     try:        
         if not found:
-            raise ValueError(
-              f"{criteria} is not a valid option"
-            )
+            if search=='column':
+               raise ValueError(
+                  f"'{criteria}' is not a valid option"
+               )
+            elif search=='data':
+                raise ValueError(
+                  f"No rows found containing '{criteria}'"
+                )
             return False
     except ValueError as e:
         print(f"Invalid data: {e}, please try again.\n")
