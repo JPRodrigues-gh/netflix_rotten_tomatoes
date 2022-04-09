@@ -30,13 +30,15 @@ The deployment terminal is set to 80 columns by 24 rows. That means that each li
 -----
 Happy coding!
 
-# Netfilx Rotten Tomatoes dataset analysis
+# Netflix Rotten Tomatoes dataset analysis
 
 ## Bugs and Fixes
 
+* get_header_choice had endless while loop because return statement in validate_criteria Try statement was not inside the if statement. As a result validation would always be false and therefore get_data_choice would not be called.
 
 ## Sources and References
 
 * The dataset I am using I downloaded from https://www.kaggle.com/datasets/ashishgup/netflix-rotten-tomatoes-metacritic-imdb
 * https://www.w3schools.com/
-* 
+* Google Sheets for Developers
+* https://www.youtube.com/watch?v=mvbnhfdDrro by Jie Jenn - set me on the path to clear sheet solution
