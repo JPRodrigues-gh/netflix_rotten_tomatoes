@@ -18,6 +18,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('Netflix Rotten Tomatoes Analysis')
 # The above code I have taken from the Love Sandwiches project walk through
 
+#  pip3 install google-api-python-client
 from googleapiclient import discovery
 
 service = discovery.build('sheets', 'v4', credentials=CREDS)
@@ -29,6 +30,55 @@ spreadsheet_id = '1v8fZd7UYTWa6Rt1QhaZ2gBqS0if6hP0KbOzWCR_r4mA'
 range_ = 'User Requested Data'
 
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
+def create_worksheet(worksheet_name):
+    """
+    This function will create a new sheet in the Netflix Rotten Tomatoes Analysis spreadsheet
+    """
+    try:
+        # Check if the sheet exist, if so clear the contents
+        print(worksheet_name)
+        if SHEET.worksheet(worksheet_name):
+            print(f"Preparing {worksheet_name} worksheet")
+            SHEET.worksheet(worksheet_name).clear()
+        #    request_body = {
+        #         'requests': [
+        #             {
+        #                 'deleteSheet': {
+        #                         'sheetId': 571084934
+        #                 }
+        #             }
+        #         ]
+        #    }
+        #    response = service.spreadsheets().batchUpdate(
+        #         spreadsheetId = spreadsheet_id,
+        #         body = request_body
+        #    ).execute()
+        #    print("Sheet found")
+        #    print()
+
+           
+    #         request_body = {
+    #             'requests': {
+    #                 'addSheet': {
+    #                     'properties': {
+    #                         'title': worksheet_name,
+    #                         'index': 2
+    #                     }
+    #                 }
+    #             }
+    #         }
+
+    #         response = service.spreadsheets().batchUpdate(
+    #             spreadsheetId = spreadsheet_id,
+    #             body = request_body
+    #         ).execute()
+    except Exception as e:
+        # Sheet doesn't exist, create sheet
+        print(f"Creating new {worksheet_name} worksheet ...")
+        SHEET.add_worksheet(title=worksheet_name, rows=500, cols=26)
+        #pip install gspread-formatting
+        SHEET.worksheet(worksheet_name).format("A1:P1", {"textFormat": {"bold": True}})
+    
 
 def get_header_choice():
     """
@@ -65,12 +115,8 @@ def get_header_choice():
             break
 
     if get_data:
-        data = get_data_choice(search_column, col_idx)
+        get_data_choice(search_column, col_idx)
     
-    # print(search_column)
-    # print(data)
-    # print(col_idx)
-    return search_column
 
 def get_data_choice(search_column, col_idx):
     """
@@ -83,46 +129,38 @@ def get_data_choice(search_column, col_idx):
         data = input(f"Please enter the data to search in the {search_column} column: ")
         print("Searching for data...\n")
         fetch_worksheet = SHEET.worksheet('Subset')
-        user_worksheet = SHEET.worksheet('User Requested Data')
+        # user_worksheet = SHEET.worksheet('User Requested Data')
         row_cnt = len(fetch_worksheet.get_all_values())
         # cell = fetch_worksheet.find(data, in_column=col_idx)
         column = fetch_worksheet.col_values(col_idx)
 
         cnt=0
         found=False
-        for i in range(1, 200):
+        for i in range(1, row_cnt):
             if data.lower() in column[i].lower():
                 found = True
                 cnt+=1
                 if cnt==1:
-                   request = service.spreadsheets().values().clear(
-                                     spreadsheetId=spreadsheet_id,
-                                     range=range_)
-                                      #, body=clear_values_request_body)
-                   response = request.execute()
+                #    request = service.spreadsheets().values().clear(
+                #                      spreadsheetId=spreadsheet_id,
+                #                      range=range_)
+                #                       #, body=clear_values_request_body)
+                #    response = request.execute()
+                   create_worksheet('User Requested Data')
+                   user_worksheet = SHEET.worksheet('User Requested Data')
                    column_list = fetch_worksheet.row_values(1)
                    user_worksheet.append_row(column_list)
                 # else:
                 # print("The data found: " + column[i])
+                print(cnt)
                 row_data = fetch_worksheet.row_values(i+1)
                 user_worksheet.append_row(row_data)
-                   
         
         if validate_criteria(found, data, 'data'):
             print(f"{cnt} rows found")
             print("You will find the data in the 'User Requested Data' worksheet.")
             break    
         
-        # user_worksheet.append_row(i)
-
-        # break
-        # found=False
-        # for i in column_list:
-        #     if i == search_column:
-        #        found=True
-        # validate_criteria(found, search_column)
-
-    return search_column
 
 def validate_criteria(found, criteria, search):
     try:        
@@ -146,7 +184,8 @@ def main():
     """
     The main function. Runs all other functions.
     """
-    search_column = get_header_choice()
+    create_worksheet("Statistics")
+    get_header_choice()
 
 print("Welcome to the Netflix Rotten Tomatoes data analysis!")
 main()

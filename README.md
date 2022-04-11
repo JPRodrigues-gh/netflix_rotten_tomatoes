@@ -45,5 +45,6 @@ Happy coding!
 
 * The dataset I am using I downloaded from https://www.kaggle.com/datasets/ashishgup/netflix-rotten-tomatoes-metacritic-imdb
 * https://www.w3schools.com/
+* stackoverflow
 * Google Sheets for Developers
-* https://www.youtube.com/watch?v=mvbnhfdDrro by Jie Jenn - set me on the path to clear sheet solution
+* Youtube videos by Jie Jenn - Gsheet API help
