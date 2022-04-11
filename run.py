@@ -23,32 +23,12 @@ from googleapiclient import discovery
 service = discovery.build('sheets', 'v4', credentials=CREDS)
 
 # The ID of the spreadsheet to update.
-spreadsheet_id = '1v8fZd7UYTWa6Rt1QhaZ2gBqS0if6hP0KbOzWCR_r4mA'  # TODO: Update placeholder value.
+spreadsheet_id = '1v8fZd7UYTWa6Rt1QhaZ2gBqS0if6hP0KbOzWCR_r4mA'
 
 # The A1 notation of the values to clear.
-range_ = 'User Requested Data'  # TODO: Update placeholder value.
+range_ = 'User Requested Data'
 
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
-
-# Install pandas package --  pip3 install pandas
-# Import pandas library 
-# import pandas as pd
-
-# dataSet = pd.read_csv('dataset/netflix-rotten-tomatoes-metacritic-imdb.csv')
-# df = dataSet.copy()
-# df.head()
-# df.info()
-
-# df2 = df[[column for column in df if df[column].count() / len(df) >= 0.3]]
-
-# # del df2['Image']
-# print("List of dropped columns:", end=" \n")
-# for c in df.columns:
-#     if c not in df2.columns:
-#         print(c, end=", \n")
-#         # del df2[c]
-# df = df2
-# df.info()
 
 def get_header_choice():
     """
