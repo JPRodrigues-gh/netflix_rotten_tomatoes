@@ -39,12 +39,18 @@ Happy coding!
 * get_data_choice call to validate_criteria placed in the for loop causing no rows found error to be shown on each row check. 
   * Moved the call to validate_criteria out of the for loop
 * line 128 user_worksheet.append_row(column_list) passing incorrect argument 'column_list' instead of 'row_data'
-* line 127 row_data = fetch_worksheet.row_values(i+1) had to +1 the argument to row_values as it returning a row before, not the requested row. 
+* line 127 row_data = fetch_worksheet.row_values(i+1) had to +1 the argument to row_values as it returning a row before, not the requested row.
+* line 95 - increased the column range to AB. As a result the whole sheet was set to bold. Changes it to AB1.
+* Quota exceeded error due to reads per minute. Changed to use pandas dataframes
+  * gspread.exceptions.APIError: {'code': 429, 'message': "Quota exceeded for quota metric 'Read requests' and limit 'Read 
+    requests per minute per user' of service 'sheets.googleapis.com' for consumer 'project_number:199256788443'.", 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'RATE_LIMIT_EXCEEDED', 'domain': 'googleapis.com', 'metadata': {'service': 'sheets.googleapis.com', 'consumer': 'projects/199256788443', 'quota_metric': 'sheets.googleapis.com/read_requests', 'quota_limit': 'ReadRequestsPerMinutePerUser'}}]}
 
 ## Sources and References
 
 * The dataset I am using I downloaded from https://www.kaggle.com/datasets/ashishgup/netflix-rotten-tomatoes-metacritic-imdb
+* I the Love Sandwiches project walk through to set up my gspread and creds
 * https://www.w3schools.com/
 * stackoverflow
 * Google Sheets for Developers
+* pandas.pydata.org
 * Youtube videos by Jie Jenn - Gsheet API help
