@@ -13,6 +13,7 @@ SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
+]
 
 # constant variable CREDS set by calling the from_service_account_file method
 # of the Credentials class and passing it our creds.json file
@@ -36,7 +37,6 @@ def create_worksheet(worksheet_name):
     """
     try:
         # Check if the sheet exist, if so clear the contents
-        # print(worksheet_name)
         if SHEET.worksheet(worksheet_name):
             print(f"Preparing {worksheet_name} worksheet")
             SHEET.worksheet(worksheet_name).clear()
@@ -44,7 +44,7 @@ def create_worksheet(worksheet_name):
         # Sheet doesn't exist, create sheet
         print(f"Creating new {worksheet_name} worksheet ...")
         SHEET.add_worksheet(title=worksheet_name, rows=500, cols=28)
-        #pip install gspread-formatting
+        #pip3 install gspread-formatting
         SHEET.worksheet(worksheet_name).format("A1:AB1", {"textFormat": {"bold": True}})
     
 
@@ -71,7 +71,6 @@ def get_header_choice():
             col_cnt+=1
             if i == search_column:
                found=True
-               col_idx=col_cnt
                break
 
         if validate_criteria(found, search_column, 'column'):
@@ -79,10 +78,10 @@ def get_header_choice():
             break
 
     if get_data:
-        get_data_choice(search_column, col_idx)
-    
+        get_data_choice(search_column)
+ 
 
-def get_data_choice(search_column, col_idx):
+def get_data_choice(search_column):
     """
     The user is prompted for the data criteria
     This data will be combined with the filter criteria to return valid rows from the sheet
@@ -91,16 +90,19 @@ def get_data_choice(search_column, col_idx):
     """
     while True:
         try:
+            user_input=[]
+            j=[]
             data = input(f"Please enter the data to search in the {search_column} column: ")
             print("Searching for data...\n")
+            i=user_input.split(' ')
+            j.extend(i)
+            if len(j)>1:
+                user_input = "|".join(j)
+
             fetch_worksheet = SHEET.worksheet('Subset')
-            row_cnt = len(fetch_worksheet.get_all_values())
-            column = fetch_worksheet.col_values(col_idx)
- 
-            create_worksheet('User Requested Data')
             user_worksheet = SHEET.worksheet('User Requested Data')
             dataframe = pd.DataFrame(fetch_worksheet.get_all_records())
-            user_select = dataframe[dataframe[search_column] == data]
+            user_select = dataframe[dataframe[search_column].str.contains(user_input,case=False,na=False)]
             set_with_dataframe(user_worksheet, user_select, include_column_header=True)
             print(f"{user_select.shape[0]} rows found")
             return True
@@ -108,6 +110,9 @@ def get_data_choice(search_column, col_idx):
             print(f"Invalid data: {e}, please try again.\n")
             return False
         
+def get_statistics():
+    
+    input("Press Enter to continue...")
 
 def validate_criteria(found, criteria, search):
     try:        
@@ -132,7 +137,10 @@ def main():
     The main function. Runs all other functions.
     """
     create_worksheet("Statistics")
+    create_worksheet('User Requested Data')
+    get_statistics()
     get_header_choice()
+
 
 print("Welcome to the Netflix Rotten Tomatoes data analysis!")
 main()
