@@ -27,18 +27,22 @@ spreadsheet_id = '1v8fZd7UYTWa6Rt1QhaZ2gBqS0if6hP0KbOzWCR_r4mA'
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
 def create_worksheet(worksheet_name):
     """
-    This function will create a new sheet in the Netflix Rotten Tomatoes Analysis spreadsheet
+    This function will create a new sheet in the Netflix Rotten Tomatoes spreadsheet
     """
     try:
         # Check if the sheet exist, if so clear the contents
         if SHEET.worksheet(worksheet_name):
-            print(f"Preparing {worksheet_name} worksheet")
+            print(f"Preparing {worksheet_name} worksheet ...")
             SHEET.worksheet(worksheet_name).clear()
-    except Exception as e:
-        # Sheet doesn't exist, create sheet
-        print(f"Creating new {worksheet_name} worksheet ...")
-        SHEET.add_worksheet(title=worksheet_name, rows=500, cols=28)
-        SHEET.worksheet(worksheet_name).format("A1:AB1", {"textFormat": {"bold": True}})
+    except Exception:
+        try:
+            # Sheet doesn't exist, create sheet
+            print(f"Creating new {worksheet_name} worksheet ...")
+            SHEET.add_worksheet(title=worksheet_name, rows=500, cols=28)
+            SHEET.worksheet(worksheet_name).format("A1:AB1", {"textFormat": {"bold": True}})
+        except Exception as e:
+            print(f"{e}")
+            return False
     
 
 def get_header_choice():
@@ -102,11 +106,11 @@ def get_data_choice(search_column):
     """
     while True:
         try:
-            user_input=[]
-            j=[]
+            user_input = []
+            j = []
             user_input = input(f"Please enter the data to search in the {search_column} column: ")
             print("Searching for data...\n")
-            i=user_input.split(' ')
+            i = user_input.split(' ')
             j.extend(i)
             if len(j)>1:
                 user_input = "|".join(j)
@@ -125,10 +129,31 @@ def get_data_choice(search_column):
 def get_statistics():
     fetch_worksheet = SHEET.worksheet('Subset')
     user_worksheet = SHEET.worksheet('User Requested Data')
-    dataframe = pd.DataFrame(fetch_worksheet.get_all_records()).drop_duplicates(subset=['Title','Genre','Series or Movie','Director','Actors'], keep=False)
+    stats_sheet =  SHEET.worksheet('Statistics')
+    column_headings = ['Title','Genre','Series or Movie','Director','Actors']
+    # dataframe = pd.DataFrame(fetch_worksheet.get_all_records()).drop_duplicates(subset=['Title','Genre','Series or Movie','Director','Actors'], keep=False)
+    dataframe = pd.DataFrame(fetch_worksheet.get_all_records(), columns=['Title','Genre','Series or Movie','Director','Actors'])
     pprint(dataframe)
-    dataframe = pd.DataFrame(fetch_worksheet.get_all_records())
-    pprint(dataframe)
+    unique_count = []
+    unique_title = dataframe['Title'].nunique()
+    unique_genre = dataframe['Genre'].nunique()
+    unique_series_movie = dataframe['Series or Movie'].nunique()
+    unique_director = dataframe['Director'].nunique()
+    unique_actors = dataframe['Actors'].nunique()
+    unique_count.append(unique_title)
+    unique_count.append(unique_genre)
+    unique_count.append(unique_series_movie)
+    unique_count.append(unique_director)
+    unique_count.append(unique_actors)
+
+    pprint(unique_title)
+    pprint(unique_genre)
+    pprint(unique_series_movie)
+    pprint(unique_director)
+    pprint(unique_actors)
+    pprint(unique_count)
+    stats_sheet.append_row(column_headings)
+    stats_sheet.append_row(unique_count)
     input("Press Enter to continue...")
 
 
@@ -136,11 +161,14 @@ def main():
     """
     The main function. Runs all other functions.
     """
+    print("*********************************************************")
+    print("* Welcome to the Netflix Rotten Tomatoes data analysis! *")
+    print("*********************************************************")
     create_worksheet("Statistics")
     create_worksheet('User Requested Data')
-    # get_statistics()
+    print("*********************************************************")
+    get_statistics()
     get_header_choice()
 
 
-print("Welcome to the Netflix Rotten Tomatoes data analysis!")
 main()
