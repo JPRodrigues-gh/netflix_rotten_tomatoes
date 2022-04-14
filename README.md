@@ -32,6 +32,18 @@ Happy coding!
 
 # Netflix Rotten Tomatoes dataset analysis
 
+## User Stories
+
+* The user is required to have a google account.
+* The application begins by first creating a gsheet for the user
+* The gsheet will contain 2 sheets, "Statistics" and "User Requested Data"
+* The application will then populate the "Statistics" sheet with data relating to the first filter criteria:
+  * Title, Genre, Series or Movie, Director, Actors
+  * The above pertain to columns of the gsheet containing the subset of data "Netflix Rotten Tomatoes"
+* The user is then prompt for the first search criteria:
+  * Title, Genre, Series or Movie, Director, Actors
+* The next user prompt is for specific data
+
 ## Bugs and Fixes
 
 * get_header_choice had endless while loop because return statement in validate_criteria Try statement was not inside the if statement. As a result validation would always be false and therefore get_data_choice would not be called.
@@ -48,7 +60,7 @@ Happy coding!
 ## Sources and References
 
 * The dataset I am using I downloaded from https://www.kaggle.com/datasets/ashishgup/netflix-rotten-tomatoes-metacritic-imdb
-* I the Love Sandwiches project walk through to set up my gspread and creds
+* I the Love Sandwiches project walk through to set up my gspread and creds for the Google API 
 * https://www.w3schools.com/
 * stackoverflow
 * Google Sheets for Developers
