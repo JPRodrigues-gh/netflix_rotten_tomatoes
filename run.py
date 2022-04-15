@@ -1,10 +1,12 @@
 import gspread
 import pandas as pd
+import numpy as np
 import pprint
 from pprint import pprint
 from google.oauth2.service_account import Credentials
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
 from googleapiclient import discovery
+from numpy import array, hstack, vstack
 
 # The scope lists the APIs that the program should access in order to run.
 SCOPE = [
@@ -53,7 +55,7 @@ def get_header_choice():
     the user provides valid input
     The rows of data fetched will be populated in "User Requested Data"
     """
-    get_data=False
+    get_data = False
     while True:
         print("You may search on the following columns: ")
         print("Title, Genre, Series or Movie, Director, Actors")
@@ -61,13 +63,13 @@ def get_header_choice():
         search_column = input("Please enter the column on which you wish to filter the data: ")
         fetch_worksheet = SHEET.worksheet('Subset')
         column_list = fetch_worksheet.row_values(1)
-        found=False
-        col_cnt=0
-        data=''
+        found = False
+        col_cnt = 0
+        data = ''
         for i in column_list:
-            col_cnt+=1
+            col_cnt += 1
             if i == search_column:
-               found=True
+               found = True
                break
 
         if validate_criteria(found, search_column, 'column'):
@@ -81,11 +83,11 @@ def get_header_choice():
 def validate_criteria(found, criteria, search):
     try:        
         if not found:
-            if search=='column':
+            if search == 'column':
                raise ValueError(
                   f"'{criteria}' is not a valid option"
                )
-            elif search=='data':
+            elif search == 'data':
                 raise ValueError(
                   f"No rows found containing '{criteria}'"
                 )
@@ -128,12 +130,11 @@ def get_data_choice(search_column):
         
 def get_statistics():
     fetch_worksheet = SHEET.worksheet('Subset')
-    user_worksheet = SHEET.worksheet('User Requested Data')
     stats_sheet =  SHEET.worksheet('Statistics')
     column_headings = ['Title','Genre','Series or Movie','Director','Actors']
-    # dataframe = pd.DataFrame(fetch_worksheet.get_all_records()).drop_duplicates(subset=['Title','Genre','Series or Movie','Director','Actors'], keep=False)
+    row_cnt = len(fetch_worksheet.get_all_values())
     dataframe = pd.DataFrame(fetch_worksheet.get_all_records(), columns=['Title','Genre','Series or Movie','Director','Actors'])
-    pprint(dataframe)
+    # pprint(dataframe)
     unique_count = []
     unique_title = dataframe['Title'].nunique()
     unique_genre = dataframe['Genre'].nunique()
@@ -145,15 +146,36 @@ def get_statistics():
     unique_count.append(unique_series_movie)
     unique_count.append(unique_director)
     unique_count.append(unique_actors)
+    # pprint(unique_genre)
+    # pprint(unique_series_movie)
+    # pprint(unique_director)
+    # pprint(unique_data)
+    unique_titles = dataframe['Title'].unique()
+    unique_genres = dataframe['Genre'].unique()
+    unique_series_movie_s = dataframe['Series or Movie'].unique()
+    unique_directors = dataframe['Director'].unique()
+    unique_actorss = dataframe['Actors'].unique()
 
-    pprint(unique_title)
-    pprint(unique_genre)
-    pprint(unique_series_movie)
-    pprint(unique_director)
-    pprint(unique_actors)
-    pprint(unique_count)
+    unique_titles = [*unique_titles,*[''] * (row_cnt - len(unique_titles))]
+    unique_titles = {unique_title: unique_titles}
+    unique_genres = [*unique_genres,*[''] * (row_cnt - len(unique_genres))]
+    unique_genres = {unique_genre: unique_genres}
+    unique_series_movie_s = [*unique_series_movie_s,*[''] * (row_cnt - len(unique_series_movie_s))]
+    unique_series_movie_s = {unique_series_movie: unique_series_movie_s}
+    unique_directors = [*unique_directors,*[''] * (row_cnt - len(unique_directors))]
+    unique_directors = {unique_director: unique_directors}
+    unique_actorss = [*unique_actorss,*[''] * (row_cnt - len(unique_actorss))]
+    unique_actorss = {unique_actors: unique_actorss}
+    new_array = hstack([unique_titles,unique_genres,unique_series_movie_s,unique_directors,unique_actorss])
+    # convert numpy array to dictionary
+    # new_array = dict(enumerate(new_array.flatten(), 1))
+    # pprint(new_array)
+    new_df = pd.DataFrame(new_array)
+    # pprint(new_df)
+    # print("*********************************************************")
     stats_sheet.append_row(column_headings)
     stats_sheet.append_row(unique_count)
+    set_with_dataframe(stats_sheet, new_df, include_index = False, row=3)
     input("Press Enter to continue...")
 
 
