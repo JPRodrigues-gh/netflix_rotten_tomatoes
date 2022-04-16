@@ -56,6 +56,11 @@ Happy coding!
 * Quota exceeded error due to reads per minute. Changed to use pandas dataframes
   * gspread.exceptions.APIError: {'code': 429, 'message': "Quota exceeded for quota metric 'Read requests' and limit 'Read 
     requests per minute per user' of service 'sheets.googleapis.com' for consumer 'project_number:199256788443'.", 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'RATE_LIMIT_EXCEEDED', 'domain': 'googleapis.com', 'metadata': {'service': 'sheets.googleapis.com', 'consumer': 'projects/199256788443', 'quota_metric': 'sheets.googleapis.com/read_requests', 'quota_limit': 'ReadRequestsPerMinutePerUser'}}]}
+* Bug in get_statistics() function throws an error
+  * raise ValueError("All arrays must be of the same length")  ValueError: All arrays must be of the same length
+  * padding the lists to the number of rows in the original source was failing because once the all the data unique actors were  
+    listed the count exceeded the number of original rows in the source sheet.
+  * Fixed by getting the count of the largest list of data
 
 ## Sources and References
 
