@@ -2,6 +2,7 @@ import gspread
 import pandas as pd
 import numpy as np
 import pprint
+import webbrowser
 from pprint import pprint
 from google.oauth2.service_account import Credentials
 from gspread_dataframe import get_as_dataframe, set_with_dataframe
@@ -20,7 +21,7 @@ SCOPE = [
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
-SHEET = GSPREAD_CLIENT.open('Netflix Rotten Tomatoes Analysis')
+SHEET = GSPREAD_CLIENT.open('Netflix Rotten Tomatoes Data')
 service = discovery.build('sheets', 'v4', credentials=CREDS)
 
 # The ID of the spreadsheet to update.
@@ -45,6 +46,35 @@ def create_worksheet(worksheet_name):
         except Exception as e:
             print(f"{e}")
             return False
+    
+
+def create_spreadsheet():
+    sheet_body = {
+        'properties': {
+            'title': 'User Netflix Rotten Tomatoes Data',
+            'locale': 'en_US',
+        },
+        'sheets': [
+            {
+                'properties': {
+                    'title': 'Statistics'
+                }
+            },
+            {
+                'properties': {
+                    'title': 'User Requested Data'
+                }
+            }
+        ]
+    }
+
+    user_sheet = service.spreadsheets().create(body = sheet_body).execute()
+    open_sheet = GSPREAD_CLIENT.open('User Netflix Rotten Tomatoes Data')
+    i = user_sheet.get('spreadsheetUrl')
+    print(user_sheet)
+    print("*********************************************************")
+    print(i)
+    # webbrowser.open_new_tab(i)
     
 
 def get_header_choice():
@@ -156,26 +186,23 @@ def get_statistics():
     unique_directors = dataframe['Director'].unique()
     unique_actorss = dataframe['Actors'].unique()
 
-    unique_titles = [*unique_titles,*[''] * (row_cnt - len(unique_titles))]
-    unique_titles = {unique_title: unique_titles}
-    unique_genres = [*unique_genres,*[''] * (row_cnt - len(unique_genres))]
-    unique_genres = {unique_genre: unique_genres}
-    unique_series_movie_s = [*unique_series_movie_s,*[''] * (row_cnt - len(unique_series_movie_s))]
-    unique_series_movie_s = {unique_series_movie: unique_series_movie_s}
-    unique_directors = [*unique_directors,*[''] * (row_cnt - len(unique_directors))]
-    unique_directors = {unique_director: unique_directors}
-    unique_actorss = [*unique_actorss,*[''] * (row_cnt - len(unique_actorss))]
-    unique_actorss = {unique_actors: unique_actorss}
-    new_array = hstack([unique_titles,unique_genres,unique_series_movie_s,unique_directors,unique_actorss])
+    title_col = [*unique_titles,*[''] * (row_cnt - len(unique_titles))]
+    genre_col = [*unique_genres,*[''] * (row_cnt - len(unique_genres))]
+    series_movie_col = [*unique_series_movie_s,*[''] * (row_cnt - len(unique_series_movie_s))]
+    director_col = [*unique_directors,*[''] * (row_cnt - len(unique_directors))]
+    actors_col = [*unique_actorss,*[''] * (row_cnt - len(unique_actorss))]
+    
+    data_dict = {'Title': title_col, 'Genre': genre_col, 'Series and Movie': series_movie_col, 'Director': director_col, 'Actors': actors_col}
+    # new_array = vstack([unique_titles,unique_genres,unique_series_movie_s,unique_directors,unique_actorss])
     # convert numpy array to dictionary
     # new_array = dict(enumerate(new_array.flatten(), 1))
     # pprint(new_array)
-    new_df = pd.DataFrame(new_array)
+    new_df = pd.DataFrame.from_dict(data_dict)
     # pprint(new_df)
     # print("*********************************************************")
-    stats_sheet.append_row(column_headings)
-    stats_sheet.append_row(unique_count)
-    set_with_dataframe(stats_sheet, new_df, include_index = False, row=3)
+    # stats_sheet.append_row(column_headings)
+    # stats_sheet.append_row(unique_count)
+    set_with_dataframe(stats_sheet, new_df, include_index = False)
     input("Press Enter to continue...")
 
 
@@ -186,6 +213,7 @@ def main():
     print("*********************************************************")
     print("* Welcome to the Netflix Rotten Tomatoes data analysis! *")
     print("*********************************************************")
+    # create_spreadsheet()
     create_worksheet("Statistics")
     create_worksheet('User Requested Data')
     print("*********************************************************")
