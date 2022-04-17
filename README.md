@@ -89,6 +89,10 @@ The app provides the user with a sheet containing a subset of data from the Netf
   * Instead, I inserted the count in the respective lists before padding with empty string
 * Due to adding of the count to the lists this affected the length of the lists.
   * I added 2 to the row_cnt to resolve the issue
+* NOT really a bug, more of a nuisance
+  * When searching for Actors the search method would search for the occurance of either of an Actor's name or surname, also in 
+    part. eg. 'Liam Neeson' would also return Actors with name 'William' because liam appears in the name.
+  * Solution was to place the code with and conditional statement where if the search is on Actors the method is not used. 
 
 
 ## Sources and References

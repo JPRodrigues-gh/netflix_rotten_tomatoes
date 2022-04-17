@@ -43,6 +43,7 @@ def create_worksheet(worksheet_name):
             sh.format("A1:AB1", {"horizontalAlignment": "CENTER",
                                  "textFormat": {"bold": True}})
         except Exception as e:
+            print()
             print(f"{e}")
             return False
 
@@ -96,6 +97,7 @@ def validate_criteria(found, criteria, search):
                 )
             return False
     except ValueError as e:
+        print()
         print(f"Invalid data: {e}, please try again.\n")
         return False
 
@@ -114,13 +116,20 @@ def get_data_choice(search_column):
         try:
             user_input = []
             j = []
-            user_input = input(f"Please enter the criteria to search "
-                               "in the {search_column} column: \n")
+            print()
+            print("(NB. The more precise the input you provide the "
+                  "better the search results!)")
+            print("(When searching for 'Actors',"
+                  " the full actors name is required)")
+            text = "Please enter the criteria to search in the"
+            user_input = input(f"{text} '{search_column}' column: \n")
+
             print("Searching for data...\n")
-            i = user_input.split(' ')
-            j.extend(i)
-            if len(j) > 1:
-                user_input = "|".join(j)
+            if search_column != "Actors":
+                i = user_input.split(' ')
+                j.extend(i)
+                if len(j) > 1:
+                    user_input = "|".join(j)
 
             fetch_worksheet = SHEET.worksheet('Subset')
             user_worksheet = SHEET.worksheet('User Requested Data')
@@ -132,6 +141,7 @@ def get_data_choice(search_column):
             print(f"{user_select.shape[0]} rows found")
             return True
         except ValueError as e:
+            print()
             print(f"Invalid data: {e}, please try again.\n")
             return False
 
