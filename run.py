@@ -1,3 +1,4 @@
+""" Runs NETFLIX_ROTTEN_TOMATOES Application """
 import gspread
 import pandas as pd
 import numpy as np
