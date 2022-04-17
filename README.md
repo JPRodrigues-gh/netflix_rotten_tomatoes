@@ -10,6 +10,7 @@ The app provides the user with a sheet containing a subset of data from the Netf
 
 * The user is required to have a google account.
 * The app makes use of the "Netflix Rotten Tomatoes Data" sheet:
+
   * https://docs.google.com/spreadsheets/d/1v8fZd7UYTWa6Rt1QhaZ2gBqS0if6hP0KbOzWCR_r4mA/edit#gid=0
 
   ![image](https://user-images.githubusercontent.com/22208203/163705176-fecf6b4c-3eb6-4de8-a5bf-55ff9cd3d350.png)
