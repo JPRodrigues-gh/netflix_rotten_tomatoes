@@ -40,7 +40,8 @@ def create_worksheet(worksheet_name):
             print(f"Creating new {worksheet_name} worksheet ...")
             SHEET.add_worksheet(title=worksheet_name, rows=500, cols=28)
             sh = SHEET.worksheet(worksheet_name)
-            sh.format("A1:AB1", {"horizontalAlignment": "CENTER", "textFormat": {"bold": True}})
+            sh.format("A1:AB1", {"horizontalAlignment": "CENTER",
+                                 "textFormat": {"bold": True}})
         except Exception as e:
             print(f"{e}")
             return False
@@ -59,7 +60,8 @@ def get_header_choice():
         print("You may search on the following columns: ")
         print("Title, Genre, Series or Movie, Director, Actors")
         print("(You may provide 1 column)")
-        search_column = input("Please enter the column name on which you wish to filter the data: \n")
+        search_column = input("Please enter the column name on which "
+                              "you wish to filter the data: \n")
         fetch_worksheet = SHEET.worksheet('Subset')
         column_list = fetch_worksheet.row_values(1)
         found = False
@@ -112,7 +114,8 @@ def get_data_choice(search_column):
         try:
             user_input = []
             j = []
-            user_input = input(f"Please enter the criteria to search in the {search_column} column: \n")
+            user_input = input(f"Please enter the criteria to search "
+                               "in the {search_column} column: \n")
             print("Searching for data...\n")
             i = user_input.split(' ')
             j.extend(i)
@@ -122,8 +125,10 @@ def get_data_choice(search_column):
             fetch_worksheet = SHEET.worksheet('Subset')
             user_worksheet = SHEET.worksheet('User Requested Data')
             dataframe = pd.DataFrame(fetch_worksheet.get_all_records())
-            user_select = dataframe[dataframe[search_column].str.contains(user_input, case=False, na=False)]
-            set_with_dataframe(user_worksheet, user_select, include_column_header=True)
+            user_select = dataframe[dataframe[search_column].str.contains
+                                    (user_input, case=False, na=False)]
+            set_with_dataframe(user_worksheet, user_select,
+                               include_column_header=True)
             print(f"{user_select.shape[0]} rows found")
             return True
         except ValueError as e:
@@ -133,7 +138,8 @@ def get_data_choice(search_column):
 
 def fetch_unique(duplicate_data):
     """
-    Function creates a list of unique entries from every cell for the respect column
+    Function creates a list of unique entries from every
+    cell for the respective columns
     """
     # Filter out duplicates from cells
     row_cnt = len(duplicate_data)
@@ -171,8 +177,10 @@ def get_statistics():
 
     fetch_worksheet = SHEET.worksheet('Subset')
     stats_sheet = SHEET.worksheet('Statistics')
-    column_headings = ['Title', 'Genre', 'Series or Movie', 'Director', 'Actors']
-    dataframe = pd.DataFrame(fetch_worksheet.get_all_records(), columns=column_headings)
+    column_headings = ['Title', 'Genre', 'Series or Movie',
+                       'Director', 'Actors']
+    dataframe = pd.DataFrame(fetch_worksheet.get_all_records(),
+                             columns=column_headings)
 
     # Get unique entries in column
     unique_title = dataframe['Title'].unique()
@@ -192,7 +200,8 @@ def get_statistics():
     cnt_director = len(unique_director)
     cnt_actor = len(unique_actor)
 
-    unique_count = (cnt_title, cnt_genre, cnt_series_movie, cnt_director, cnt_actor)
+    unique_count = (cnt_title, cnt_genre, cnt_series_movie,
+                    cnt_director, cnt_actor)
     row_cnt = max(unique_count) + 2
 
     # Insert the unique record count in the first row of the column
@@ -204,21 +213,24 @@ def get_statistics():
 
     title_col = [*unique_title, *[''] * (row_cnt - len(unique_title))]
     genre_col = [*unique_genre, *[''] * (row_cnt - len(unique_genre))]
-    series_movie_col = [*unique_series_movie, *[''] * (row_cnt - len(unique_series_movie))]
+    series_movie_col = [*unique_series_movie,
+                        *[''] * (row_cnt - len(unique_series_movie))]
     director_col = [*unique_director, *[''] * (row_cnt - len(unique_director))]
     actor_col = [*unique_actor, *[''] * (row_cnt - len(unique_actor))]
 
-    data_dict = {'Title': title_col, 'Genre': genre_col, 'Series and Movie': series_movie_col, 'Director': director_col, 'Actors': actor_col}
+    data_dict = {'Title': title_col, 'Genre': genre_col,
+                 'Series and Movie': series_movie_col,
+                 'Director': director_col, 'Actors': actor_col}
     new_df = pd.DataFrame.from_dict(data_dict)
     set_with_dataframe(stats_sheet, new_df, include_index=False)
 
-    print(**************************************************)
-    print(** You may review the Statistics worksheet for  **)
-    print(** possible search criteria.                    **)
-    print(**                                              **)
-    print(** When you press Enter to continue, you will   **)
-    print(** be prompted for search criteria.             **)
-    print(**************************************************)
+    print("**************************************************")
+    print("** You may review the Statistics worksheet for  **")
+    print("** possible search criteria.                    **")
+    print("**                                              **")
+    print("** When you press Enter to continue, you will   **")
+    print("** be prompted for search criteria.             **")
+    print("**************************************************")
 
     input("Press Enter to continue...\n")
 
