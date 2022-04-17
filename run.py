@@ -22,7 +22,7 @@ SHEET = GSPREAD_CLIENT.open('Netflix Rotten Tomatoes Data')
 service = discovery.build('sheets', 'v4', credentials=CREDS)
 
 # The ID of the spreadsheet to update.
-spreadsheet_id = '1v8fZd7UYTWa6Rt1QhaZ2gBqS0if6hP0KbOzWCR_r4mA'
+SPREADSHEET_ID = '1v8fZd7UYTWa6Rt1QhaZ2gBqS0if6hP0KbOzWCR_r4mA'
 
 
 def create_worksheet(worksheet_name):
@@ -39,9 +39,9 @@ def create_worksheet(worksheet_name):
             # Sheet doesn't exist, create sheet
             print(f"Creating new {worksheet_name} worksheet ...")
             SHEET.add_worksheet(title=worksheet_name, rows=500, cols=28)
-            sh = SHEET.worksheet(worksheet_name)
-            sh.format("A1:AB1", {"horizontalAlignment": "CENTER",
-                                 "textFormat": {"bold": True}})
+            work_sheet = SHEET.worksheet(worksheet_name)
+            work_sheet.format("A1:AB1", {"horizontalAlignment": "CENTER",
+                              "textFormat": {"bold": True}})
         except Exception as e:
             print()
             print(f"{e}")
