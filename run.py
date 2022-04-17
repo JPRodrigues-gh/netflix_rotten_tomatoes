@@ -5,8 +5,6 @@ import numpy as np
 from google.oauth2.service_account import Credentials
 from gspread_dataframe import set_with_dataframe
 from googleapiclient import discovery
-from pprint import pprint
-
 
 # The scope lists the APIs that the program should access in order to run.
 SCOPE = [
@@ -61,7 +59,7 @@ def get_header_choice():
         print("You may search on the following columns: ")
         print("Title, Genre, Series or Movie, Director, Actors")
         print("(You may provide 1 column)")
-        search_column = input("Please enter the column name on which you wish to filter the data: ")
+        search_column = input("Please enter the column name on which you wish to filter the data: \n")
         fetch_worksheet = SHEET.worksheet('Subset')
         column_list = fetch_worksheet.row_values(1)
         found = False
@@ -114,7 +112,7 @@ def get_data_choice(search_column):
         try:
             user_input = []
             j = []
-            user_input = input(f"Please enter the criteria to search in the {search_column} column: ")
+            user_input = input(f"Please enter the criteria to search in the {search_column} column: \n")
             print("Searching for data...\n")
             i = user_input.split(' ')
             j.extend(i)
@@ -222,7 +220,7 @@ def get_statistics():
     print(** be prompted for search criteria.             **)
     print(**************************************************)
 
-    input("Press Enter to continue...")
+    input("Press Enter to continue...\n")
 
 
 def main():

@@ -1,35 +1,3 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
-
-Welcome JPRodrigues-gh,
-
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **August 17, 2021**
-
-## Reminders
-
-* Your code must be placed in the `run.py` file
-* Your dependencies must be placed in the `requirements.txt` file
-* Do not edit any of the other files or your code may not deploy properly
-
-## Creating the Heroku app
-
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
-
-1. `heroku/python`
-2. `heroku/nodejs`
-
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
-
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
-
-Connect your GitHub repository and deploy as normal.
-
-## Constraints
-
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
-
------
-Happy coding!
-
 # Netflix Rotten Tomatoes dataset analysis
 
 ## User Stories
@@ -39,7 +7,8 @@ Happy coding!
 * The gsheet will contain 2 sheets, "Statistics" and "User Requested Data"
 * The application will then populate the "Statistics" sheet with data relating to the first filter criteria:
   * Title, Genre, Series or Movie, Director, Actors
-  * The above pertain to columns of the gsheet containing the subset of data "Netflix Rotten Tomatoes"
+  * Below the headings there will be a count of the unique rows for the respective column
+  * Data relating to the columns above will be drawn and manipulated from the gsheet containing the subset of data "Netflix Rotten Tomatoes"
 * The user is then prompt for the first search criteria:
   * Title, Genre, Series or Movie, Director, Actors
 * The next user prompt is for specific data
@@ -61,6 +30,11 @@ Happy coding!
   * padding the lists to the number of rows in the original source was failing because once the all the data unique actors were  
     listed the count exceeded the number of original rows in the source sheet.
   * Fixed by getting the count of the largest list of data
+* Using new_df.loc[0] = unique_count in get_statistics was removing the first row of data.
+  * Instead, I inserted the count in the respective lists before padding with empty string
+* Due to adding of the count to the lists this affected the length of the lists.
+  * I added 2 to the row_cnt to resolve the issue
+
 
 ## Sources and References
 
