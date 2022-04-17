@@ -45,6 +45,25 @@ The app provides the user with a sheet containing a subset of data from the Netf
   ![image](https://user-images.githubusercontent.com/22208203/163705455-cdbe303f-b4fb-492a-a370-cc946e095836.png)
 
 
+## Heroku
+
+* The app running on Heroku
+
+  * User enter first criteria: 'Title'
+  ![image](https://user-images.githubusercontent.com/22208203/163713352-39a1f068-ba07-4b29-ba3b-51ad12f12dc3.png)
+
+  * User enters second criteria, partial text: 'Zom'
+  ![image](https://user-images.githubusercontent.com/22208203/163713432-a9ae2682-7079-4818-b143-4bef0bd020eb.png)
+
+  * The Subset sheet. The data source for the application
+  ![image](https://user-images.githubusercontent.com/22208203/163713406-0cf9b816-b5c0-4ca5-87bd-6c8980739c10.png)
+  
+  * The Statistics sheet. Show unique entries for the five columns: Title, Genre, Series or Movie, Director, Actors
+  ![image](https://user-images.githubusercontent.com/22208203/163713449-210f142e-d73c-4184-b3f5-e9f62cd19f9d.png)
+
+  * The User Requested Data sheet hold the results of the search
+  ![image](https://user-images.githubusercontent.com/22208203/163713458-f15f6546-2b3f-484e-99cb-376c154e5ce5.png)
+
 ## Design
 
 * I used Lucidchart to build a flow chart for the building the app
