@@ -146,9 +146,13 @@ The app provides the user with a sheet containing a subset of data from the Netf
 ## Deployement
 
 * The link to the deployed app:
+
   * https://netflix-rotten-tomatoes.herokuapp.com/
+  
 * Followed the following instruction from kevin_ci:
+
   ![image](https://user-images.githubusercontent.com/22208203/163704546-13b9f670-dec8-45eb-9e23-6d68a5247f7e.png)
 
 * The app was deployed via the GitPod console.
+
   ![image](https://user-images.githubusercontent.com/22208203/163704510-63568164-4e21-4704-9165-2228f8ff91e5.png)
