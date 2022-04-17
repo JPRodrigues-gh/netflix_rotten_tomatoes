@@ -104,7 +104,7 @@ The app provides the user with a sheet containing a subset of data from the Netf
 ## Bugs and Fixes
 
 * get_header_choice had endless while loop because return statement in validate_criteria Try statement was not inside the if statement. As a result validation would always be false and therefore get_data_choice would not be called.
-  * Moved the validate_criteria Try statement inside the if statement
+  * Moved the validate_criteria 'Try' statement inside the if statement
 * get_data_choice call to validate_criteria placed in the for loop causing no rows found error to be shown on each row check. 
   * Moved the call to validate_criteria out of the for loop
 * line 128 user_worksheet.append_row(column_list) passing incorrect argument 'column_list' instead of 'row_data'
